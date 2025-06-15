@@ -1,30 +1,45 @@
-import Image from 'next/image';
-import SubscriptionForm from '@/components/SubscriptionForm';
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+
+export default function SubscriptionForm() {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email.trim()) return;
+
+    // Aquí podrías enviar el email a tu backend o servicio de suscripción
+    console.log('Correo suscrito:', email);
+
+    setSubmitted(true);
+    setEmail('');
+  };
+
   return (
-    <main className="relative flex flex-col items-center justify-center min-h-screen text-white overflow-hidden">
-      
-      <Image 
-        src="/background.jpg" 
-        alt="Playa relajante" 
-        fill
-        style={{objectFit:'cover'}}
-        priority
-      />
-
-      <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-
-      <div className="relative z-10 flex flex-col items-center gap-4 text-center px-4">
-        <Image src="/logo.png" alt="Traveli" width={150} height={150} />
-
-        <h1 className="text-4xl font-semibold">Viaja como si ya hubieses estado</h1>
-        <p className="text-lg max-w-xl">
-          Con <strong>Traveli</strong> nos conectamos, hacemos tours colaborativos, mapas con rutas propuestas, tips personalizados, AI, audioguías y mucho más.
-        </p>
-
-        <SubscriptionForm />
-      </div>
-    </main>
+    <form onSubmit={handleSubmit} className="flex flex-col items-center gap-3 w-full max-w-md">
+      {submitted ? (
+        <p className="text-green-300 text-sm">¡Gracias por suscribirte!</p>
+      ) : (
+        <>
+          <input
+            type="email"
+            placeholder="Ingresa tu correo"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-2 rounded text-black focus:outline-none focus:ring-2 focus:ring-white"
+          />
+          <button
+            type="submit"
+            className="px-6 py-2 bg-white text-black rounded hover:bg-gray-300 transition-colors"
+          >
+            Quiero saber más
+          </button>
+        </>
+      )}
+    </form>
   );
 }
